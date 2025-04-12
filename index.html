@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bienale</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      display: grid;
+      background-color: black;
+    }
+
+    .container {
+      height: 100vh;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .screen {
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      scroll-snap-align: start;
+    }
+
+    .carousel-wrapper {
+      flex: 1;
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      position: relative;
+    }
+
+    .carousel-wrapper::-webkit-scrollbar {
+      display: none;
+    }
+
+    .carousel {
+      display: flex;
+      height: 100%;
+    }
+
+    .slide {
+      min-width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: bold;
+      color: black;
+      scroll-snap-align: start;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      position: relative;
+    }
+
+    /* Red swipe icon */
+    .swipe-icon {
+      position: absolute;
+      bottom: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 40px;
+      /*
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="red" viewBox="0 0 16 16"><path d="M12.354 4.646a.5.5 0 0 0-.708 0L9 7.293V1.5a.5.5 0 0 0-1 0v5.793L4.354 4.646a.5.5 0 1 0-.708.708l4 4a.5.5 0 0 0 .708 0l4-4a.5.5 0 0 0 0-.708z"/></svg>') no-repeat center;
+      background-size: contain; */
+      animation: swipe 1.5s infinite ease-in-out;
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: 110;
+    }
+
+
+    @keyframes swipe {
+      0% { transform: translateX(-50%) translateX(0); opacity: 0.7; }
+      50% { transform: translateX(-50%) translateX(-20px); opacity: 1; }
+      100% { transform: translateX(-50%) translateX(0); opacity: 0.7; }
+    }
+
+    /* Horizontal Indicator */
+    .indicator-container {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: white;
+      transition: background-color 0.3s;
+      border: 1px, solid black;
+
+    }
+
+    .dot.active {
+      background-color: blue;
+    }
+
+    /* Vertical Indicator */
+    .vertical-indicator {
+      position: fixed;
+      top: 50%;
+      right: 250px;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .vertical-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: white;
+      transition: background-color 0.3s;
+      border: 1px solid black;
+    }
+
+    .vertical-dot.active {
+      background-color:blue;
+    }
+
+    /* Animated PNG Swipe Icon (Right side) */
+    .animated-swipe-icon {
+      position: fixed;
+      right: 500px;
+      top: 80%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: auto;
+      animation: swipeBounce 1.5s ease-in-out infinite;
+      opacity: 0.8;
+      z-index: 120;
+      pointer-events: none;
+    }
+
+    @keyframes swipeBounce {
+      0%, 100% {
+        transform: translateY(-50%) translateX(0);
+      }
+      50% {
+        transform: translateY(-50%) translateX(-10px);
+      }
+    }
+
+    .vertical-swipe-icon {
+      position: fixed;
+      bottom: 250px;
+      left: 400px;
+      transform: translateX(-50%);
+      width: 50px;
+      height: auto;
+      animation: swipeUpDown 1.5s ease-in-out infinite;
+      opacity: 0.8;
+      z-index: 120;
+      pointer-events: none;
+    }
+
+    @keyframes swipeUpDown {
+      0%, 100% {
+        transform: translateX(-50%) translateY(0);
+      }
+      50% {
+        transform: translateX(-50%) translateY(-10px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- OVLADACIE PANELY-->
+  <button id="fullscreen-toggle" style="
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 150;
+  padding: 10px 15px;
+  font-size: 14px;
+  border: none;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+">
+  Fullscreen
+</button>
+
+<input
+  type="range"
+  id="zoom-slider"
+  min="50"
+  max="150"
+  value="100"
+  style="
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    z-index: 150;
+    transform: rotate(-90deg);
+    transform-origin: right top;
+    width: 120px;
+    height: 30px;
+    opacity: 0.8;
+    cursor: pointer;
+"
+/>
+
+<!-- Horizontal Offset Slider -->
+<input
+  type="range"
+  id="horizontal-indicator-slider"
+  min="50"
+  max="150"
+  value="100"
+  style="
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    z-index: 150;
+    width: 120px;
+    height: 30px;
+    opacity: 0.8;
+    cursor: pointer;
+"
+/>
+
+<!-- Vertical Offset Slider -->
+<input
+  type="range"
+  id="vertical-indicator-slider"
+  min="50"
+  max="150"
+  value="100"
+  style="
+    position: fixed;
+    top: 140px;
+    right: 20px;
+    z-index: 150;
+    width: 120px;
+    height: 30px;
+    opacity: 0.8;
+    cursor: pointer;
+"
+/>
+<!-- / OVLADACIE PANELY-->
+
+<div id="viewport-wrapper" style="width: 100vw; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+  <div class="container">
+
+    <!-- SCREEN 1 -->
+    <div class="screen" data-screen-index="0">
+      <div class="carousel-wrapper">
+        <div class="carousel">
+          <div class="slide" style="background-image: url('images/screen1_slide1.jpg');">
+            <div class="swipe-icon"></div>
+            <img src="swipe dole.png" alt="Swipe Down Icon" class="vertical-swipe-icon" />
+          </div>
+          <div class="slide" style="background-image: url('images/1_1.jpeg');"></div>
+          <div class="slide" style="background-image: url('images/1_2.jpeg');"></div>
+          <div class="slide" style="background-image: url('images/1_3.jpeg');"></div>
+          <div class="slide" style="background-image: url('images/1_4.jpeg');"></div>
+          <div class="slide" style="background-image: url('images/1_5.jpeg');"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 2 -->
+    <div class="screen" data-screen-index="1">
+      <div class="carousel-wrapper">
+        <div class="carousel">
+          <div class="slide" style="background-image: url('images/screen2_slide1.jpg');">
+            <div class="swipe-icon"></div>
+          </div>
+          <div class="slide" style="background-image: url('images/screen2_slide2.jpg');"></div>
+          <div class="slide" style="background-image: url('images/screen2_slide3.jpg');"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 3 -->
+    <div class="screen" data-screen-index="2">
+      <div class="carousel-wrapper">
+        <div class="carousel">
+          <div class="slide" style="background-image: url('images/screen3_slide1.jpg');">
+            <div class="swipe-icon"></div>
+          </div>
+          <div class="slide" style="background-image: url('images/screen3_slide2.jpg');"></div>
+          <div class="slide" style="background-image: url('images/screen3_slide3.jpg');"></div>
+          <div class="slide" style="background-image: url('images/screen3_slide4.jpg');"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  </div>
+
+  <!-- Indicators -->
+  <div class="indicator-container" id="indicator-container"></div>
+  <div class="vertical-indicator" id="vertical-indicator"></div>
+
+  <!-- Fixed Swipe PNG Icon -->
+  <img id="swipe_left" src="swipe-left.png" alt="Swipe PNG" class="animated-swipe-icon" />
+
+  <script>
+
+const zoomSlider = document.getElementById("zoom-slider");
+const container = document.querySelector(".container");
+const wrapper = document.getElementById("viewport-wrapper");
+
+zoomSlider.addEventListener("input", (e) => {
+  const zoomLevel = e.target.value;
+  container.style.transform = `scale(${zoomLevel / 100})`;
+  container.style.transformOrigin = "center center";
+});
+
+// -> Indicators zoom slider
+
+const horizontalIndicatorSlider = document.getElementById("horizontal-indicator-slider");
+const verticalIndicatorSlider = document.getElementById("vertical-indicator-slider");
+
+const horizontalIndicator = document.getElementById("indicator-container");
+const verticalIndicator = document.getElementById("vertical-indicator");
+
+// Store original positions
+const defaultHorizontalBottom = 80; // px
+const defaultVerticalRight = 250;   // px
+
+// Update positions on slider input
+horizontalIndicatorSlider.addEventListener("input", (e) => {
+  const scale = e.target.value / 100;
+  horizontalIndicator.style.bottom = `${defaultHorizontalBottom * scale}px`;
+});
+
+verticalIndicatorSlider.addEventListener("input", (e) => {
+  const scale = e.target.value / 100;
+  verticalIndicator.style.right = `${defaultVerticalRight * scale}px`;
+});
+
+
+// fullscreen
+const fullscreenButton = document.getElementById("fullscreen-toggle");
+
+fullscreenButton.addEventListener("click", () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch((err) => {
+      alert(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+    });
+  } else {
+    document.exitFullscreen();
+  }
+});
+
+// Optional: Change button text based on fullscreen state
+document.addEventListener("fullscreenchange", () => {
+  fullscreenButton.textContent = document.fullscreenElement ? "Exit Fullscreen" : "Fullscreen";
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const screens = document.querySelectorAll(".screen");
+  const horizontalIndicator = document.getElementById("indicator-container");
+  const verticalIndicator = document.getElementById("vertical-indicator");
+  const swipeLeftIcon = document.getElementById("swipe_left");
+  let activeScreenIndex = 0;
+
+  function updateHorizontalIndicators(slideCount, activeSlideIndex) {
+    horizontalIndicator.innerHTML = "";
+    for (let i = 0; i < slideCount; i++) {
+      const dot = document.createElement("div");
+      dot.className = "dot" + (i === activeSlideIndex ? " active" : "");
+      horizontalIndicator.appendChild(dot);
+    }
+  }
+
+  function updateVerticalIndicator(activeIndex) {
+    const verticalDots = document.querySelectorAll(".vertical-dot");
+    verticalDots.forEach((dot, i) => {
+      dot.classList.toggle("active", i === activeIndex);
+    });
+  }
+
+  function hideSwipeIcons() {
+    document.querySelectorAll(".swipe-icon, .vertical-swipe-icon").forEach(icon => icon.style.display = "none");
+    if (swipeLeftIcon) swipeLeftIcon.style.display = "none";
+  }
+
+  // Create vertical dots
+  screens.forEach((_, i) => {
+    const dot = document.createElement("div");
+    dot.classList.add("vertical-dot");
+    if (i === 0) dot.classList.add("active");
+    verticalIndicator.appendChild(dot);
+  });
+
+  screens.forEach((screen, screenIndex) => {
+    const carouselWrapper = screen.querySelector(".carousel-wrapper");
+    const slides = screen.querySelectorAll(".slide");
+
+    if (screenIndex === 0) {
+      updateHorizontalIndicators(slides.length, 0);
+    }
+
+    let isScrolling;
+    carouselWrapper.addEventListener("scroll", () => {
+      hideSwipeIcons();
+      clearTimeout(isScrolling);
+      isScrolling = setTimeout(() => {
+        const scrollLeft = carouselWrapper.scrollLeft;
+        const currentSlide = Math.round(scrollLeft / window.innerWidth);
+        if (screenIndex === activeScreenIndex) {
+          updateHorizontalIndicators(slides.length, currentSlide);
+        }
+      }, 100);
+    });
+
+    ['touchstart', 'mousedown'].forEach(event => {
+      screen.addEventListener(event, hideSwipeIcons);
+    });
+
+    carouselWrapper.scrollLeft = 0;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            activeScreenIndex = screenIndex;
+            updateVerticalIndicator(screenIndex);
+            const currentSlide = Math.round(carouselWrapper.scrollLeft / window.innerWidth);
+            updateHorizontalIndicators(slides.length, currentSlide);
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    observer.observe(screen);
+  });
+
+  ['touchstart', 'mousedown', 'scroll'].forEach(event => {
+    document.addEventListener(event, hideSwipeIcons, { once: true });
+  });
+});
+
+
+  </script>
+</body>
+</html>
