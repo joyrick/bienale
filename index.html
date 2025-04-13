@@ -286,54 +286,55 @@
 
   <!-- SCRIPT -->
   <script>
+    const swipeIcons = document.querySelectorAll('.swipe-icon, .vertical-swipe-icon, #swipe_left');
+  
+    const hideSwipeIcons = () => {
+      swipeIcons.forEach(icon => icon.style.display = 'none');
+    };
+  
     document.getElementById('toggle-overlay').addEventListener('click', () => {
       const overlay = document.getElementById('control-overlay');
       overlay.style.display = overlay.style.display === 'flex' ? 'none' : 'flex';
     });
-
-    const zoomSlider = document.getElementById("zoom-slider");
-    const container = document.querySelector(".container");
-
-    zoomSlider.addEventListener("input", e => {
-      const zoom = e.target.value / 100;
-      container.style.transform = `scale(${zoom})`;
-      container.style.transformOrigin = "center center";
-    });
-
-    document.getElementById("horizontal-indicator-slider").addEventListener("input", e => {
-      document.getElementById("indicator-container").style.bottom = `${80 * (e.target.value / 100)}px`;
-    });
-
-    document.getElementById("vertical-indicator-slider").addEventListener("input", e => {
-      document.getElementById("vertical-indicator").style.right = `${250 * (e.target.value / 100)}px`;
-    });
-
-    const homeButton = document.getElementById("home-button");
-    document.getElementById("home-horizontal-slider").addEventListener("input", e => {
-      homeButton.style.left = `${e.target.value}%`;
-    });
-    document.getElementById("home-vertical-slider").addEventListener("input", e => {
-      homeButton.style.top = `${e.target.value}%`;
-    });
-
-    const fullscreenButton = document.getElementById("fullscreen-toggle");
-    fullscreenButton.addEventListener("click", () => {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
-      } else {
-        document.exitFullscreen();
-      }
-    });
-
-    document.addEventListener("fullscreenchange", () => {
-      fullscreenButton.textContent = document.fullscreenElement ? "Exit Fullscreen" : "Fullscreen";
-    });
-
-    document.getElementById("show-swipe-icons").addEventListener("click", () => {
-      document.querySelectorAll(".swipe-icon, .vertical-swipe-icon, #swipe_left").forEach(el => {
-        el.style.display = "block";
+  
+    // Fullscreen on load and refresh
+    window.addEventListener('load', () => {
+      const goFullscreen = () => {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch((err) => {
+            console.warn("Fullscreen request failed:", err);
+          });
+        }
+      };
+  
+      goFullscreen();
+  
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          goFullscreen();
+        }
+      });
+  
+      // Swipe icon hiding on vertical scroll
+      const container = document.querySelector('.container');
+      let scrollTimeout;
+      container.addEventListener('scroll', () => {
+        hideSwipeIcons();
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {}, 100);
+      });
+  
+      // Swipe icon hiding on horizontal scroll
+      document.querySelectorAll('.carousel-wrapper').forEach(carousel => {
+        let horizontalScrollTimeout;
+        carousel.addEventListener('scroll', () => {
+          hideSwipeIcons();
+          clearTimeout(horizontalScrollTimeout);
+          horizontalScrollTimeout = setTimeout(() => {}, 100);
+        });
       });
     });
   </script>
+  
 </body>
 </html>
