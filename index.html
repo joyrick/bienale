@@ -217,7 +217,7 @@
   Fullscreen
 </button>
 
-<button id="toggle-swipe-icons" style="
+<button id="show-swipe-icons" style="
   position: fixed;
   top: 60px;
   right: 20px;
@@ -230,7 +230,7 @@
   border-radius: 8px;
   cursor: pointer;
 ">
-  Toggle Swipe Icons
+  Show Swipe Icons
 </button>
 
 <input
@@ -401,8 +401,7 @@
       const horizontalIndicator = document.getElementById("indicator-container");
       const verticalIndicator = document.getElementById("vertical-indicator");
       const swipeLeftIcon = document.getElementById("swipe_left");
-  
-      const toggleSwipeIconsButton = document.getElementById("toggle-swipe-icons");
+      const showSwipeIconsButton = document.getElementById("show-swipe-icons");
   
       let activeScreenIndex = 0;
       let swipeIconsHidden = false;
@@ -438,10 +437,9 @@
         setSwipeIconsVisible(false);
       }
   
-      // Toggle button functionality
-      toggleSwipeIconsButton.addEventListener("click", () => {
-        const iconsVisible = !swipeIconsManuallyHidden;
-        setSwipeIconsVisible(!iconsVisible);
+      // Show button only sets visible state
+      showSwipeIconsButton.addEventListener("click", () => {
+        setSwipeIconsVisible(true);
       });
   
       // Create vertical dots
