@@ -401,8 +401,12 @@
       const horizontalIndicator = document.getElementById("indicator-container");
       const verticalIndicator = document.getElementById("vertical-indicator");
       const swipeLeftIcon = document.getElementById("swipe_left");
+  
+      const toggleSwipeIconsButton = document.getElementById("toggle-swipe-icons");
+  
       let activeScreenIndex = 0;
       let swipeIconsHidden = false;
+      let swipeIconsManuallyHidden = false;
   
       function updateHorizontalIndicators(slideCount, activeSlideIndex) {
         horizontalIndicator.innerHTML = "";
@@ -420,12 +424,25 @@
         });
       }
   
-      function hideSwipeIcons() {
-        if (swipeIconsHidden) return;
-        document.querySelectorAll(".swipe-icon, .vertical-swipe-icon").forEach(icon => icon.style.display = "none");
-        if (swipeLeftIcon) swipeLeftIcon.style.display = "none";
-        swipeIconsHidden = true;
+      function setSwipeIconsVisible(visible) {
+        document.querySelectorAll(".swipe-icon, .vertical-swipe-icon").forEach(icon => {
+          icon.style.display = visible ? "block" : "none";
+        });
+        if (swipeLeftIcon) swipeLeftIcon.style.display = visible ? "block" : "none";
+        swipeIconsHidden = !visible;
+        swipeIconsManuallyHidden = !visible;
       }
+  
+      function hideSwipeIcons() {
+        if (swipeIconsHidden || swipeIconsManuallyHidden) return;
+        setSwipeIconsVisible(false);
+      }
+  
+      // Toggle button functionality
+      toggleSwipeIconsButton.addEventListener("click", () => {
+        const iconsVisible = !swipeIconsManuallyHidden;
+        setSwipeIconsVisible(!iconsVisible);
+      });
   
       // Create vertical dots
       screens.forEach((_, i) => {
@@ -435,7 +452,7 @@
         verticalIndicator.appendChild(dot);
       });
   
-      // Handle each screen's horizontal scroll
+      // Handle horizontal scrolling
       screens.forEach((screen, screenIndex) => {
         const carouselWrapper = screen.querySelector(".carousel-wrapper");
         const slides = screen.querySelectorAll(".slide");
@@ -476,35 +493,15 @@
         observer.observe(screen);
       });
   
-      // Detect vertical scroll on the main container
+      // Handle vertical scroll
       const container = document.querySelector(".container");
       let verticalScrollTimeout;
       container.addEventListener("scroll", () => {
         hideSwipeIcons();
         clearTimeout(verticalScrollTimeout);
-        verticalScrollTimeout = setTimeout(() => {
-          // Optional debounce logic
-        }, 100);
+        verticalScrollTimeout = setTimeout(() => {}, 100);
       });
     });
-
-    // Swipe icon toggle button
-const toggleSwipeIconsButton = document.getElementById("toggle-swipe-icons");
-let swipeIconsManuallyHidden = false;
-
-function setSwipeIconsVisible(visible) {
-  document.querySelectorAll(".swipe-icon, .vertical-swipe-icon").forEach(icon => {
-    icon.style.display = visible ? "block" : "none";
-  });
-  if (swipeLeftIcon) swipeLeftIcon.style.display = visible ? "block" : "none";
-  swipeIconsHidden = !visible; // sync with scroll-hiding
-  swipeIconsManuallyHidden = !visible;
-}
-
-toggleSwipeIconsButton.addEventListener("click", () => {
-  const iconsVisible = !swipeIconsManuallyHidden;
-  setSwipeIconsVisible(!iconsVisible);
-});
   </script>
   
 </body>
