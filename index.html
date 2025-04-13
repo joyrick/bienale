@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bienale</title>
   <style>
     * {
@@ -47,6 +47,7 @@
       scroll-snap-type: x mandatory;
       scroll-behavior: smooth;
       scrollbar-width: none;
+      -ms-overflow-style: none;
       position: relative;
     }
 
@@ -93,6 +94,39 @@
       50% { transform: translateX(-70%); opacity: 1; }
     }
 
+    .animated-swipe-icon, .vertical-swipe-icon {
+      position: fixed;
+      width: 50px;
+      height: auto;
+      opacity: 0.8;
+      z-index: 120;
+      pointer-events: none;
+      animation: swipeBounce 1.5s ease-in-out infinite;
+    }
+
+    .animated-swipe-icon {
+      right: 500px;
+      top: 80%;
+      transform: translateY(-50%);
+    }
+
+    @keyframes swipeBounce {
+      0%, 100% { transform: translateY(-50%) translateX(0); }
+      50% { transform: translateY(-50%) translateX(-10px); }
+    }
+
+    .vertical-swipe-icon {
+      bottom: 250px;
+      left: 400px;
+      transform: translateX(-50%);
+      animation-name: swipeUpDown;
+    }
+
+    @keyframes swipeUpDown {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-10px); }
+    }
+
     .indicator-container, .vertical-indicator {
       display: flex;
       gap: 10px;
@@ -128,39 +162,6 @@
       background-color: blue;
     }
 
-    .animated-swipe-icon, .vertical-swipe-icon {
-      position: fixed;
-      width: 50px;
-      height: auto;
-      opacity: 0.8;
-      z-index: 120;
-      pointer-events: none;
-      animation: swipeBounce 1.5s ease-in-out infinite;
-    }
-
-    .animated-swipe-icon {
-      right: 500px;
-      top: 80%;
-      transform: translateY(-50%);
-    }
-
-    .vertical-swipe-icon {
-      bottom: 250px;
-      left: 400px;
-      transform: translateX(-50%);
-      animation-name: swipeUpDown;
-    }
-
-    @keyframes swipeBounce {
-      0%, 100% { transform: translateY(-50%) translateX(0); }
-      50% { transform: translateY(-50%) translateX(-10px); }
-    }
-
-    @keyframes swipeUpDown {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(-10px); }
-    }
-
     .button-container {
       position: fixed;
       top: 10px;
@@ -184,6 +185,8 @@
     }
 
     .home-button:hover,
+    .home-button:focus,
+    .home-button:active,
     .control-overlay-button:hover {
       background-color: blue;
       color: white;
@@ -226,42 +229,89 @@
       font-size: 14px;
       margin-bottom: 20px;
     }
+
+    .menu-screen {
+      background-size: cover;
+      background-position: center;
+      color: white;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .menu-title {
+      font-size: 3rem;
+      margin-top: 60px;
+    }
+
+    .menu-links {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .menu-links a {
+      text-decoration: none;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 1.5rem;
+      transition: background 0.3s;
+    }
+
+    .menu-links a:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
   </style>
 </head>
 <body>
-
-  <!-- NAVIGATION -->
   <div class="button-container">
-    <a href="landingpage.html" id="home-button" class="home-button">Home</a>
+    <a href="#" id="home-button" class="home-button">Home</a>
     <button id="toggle-overlay" class="control-overlay-button">Controls</button>
   </div>
 
-  <!-- OVERLAY PANEL -->
   <div id="control-overlay" class="control-overlay">
-    <button class="control-overlay-close control-button" onclick="document.getElementById('control-overlay').style.display='none'">Close</button>
+    <button class="control-overlay-close control-button"
+            onclick="document.getElementById('control-overlay').style.display='none'">Close</button>
     <button id="fullscreen-toggle" class="control-button">Fullscreen</button>
     <button id="show-swipe-icons" class="control-button">Show Swipe Icons</button>
 
     <label for="zoom-slider">Zoom Level</label>
-    <input type="range" id="zoom-slider" min="50" max="150" value="100" class="control-button">
+    <input type="range" id="zoom-slider" min="50" max="150" value="100" class="control-button"/>
 
     <label for="horizontal-indicator-slider">Horizontal Indicator Position</label>
-    <input type="range" id="horizontal-indicator-slider" min="50" max="150" value="100" class="control-button">
+    <input type="range" id="horizontal-indicator-slider" min="50" max="150" value="100" class="control-button"/>
 
     <label for="vertical-indicator-slider">Vertical Indicator Position</label>
-    <input type="range" id="vertical-indicator-slider" min="50" max="150" value="100" class="control-button">
+    <input type="range" id="vertical-indicator-slider" min="50" max="150" value="100" class="control-button"/>
 
     <label for="home-horizontal-slider">Home Button Horizontal Position</label>
-    <input type="range" id="home-horizontal-slider" min="0" max="100" value="50" class="control-button">
+    <input type="range" id="home-horizontal-slider" min="0" max="100" value="50" class="control-button"/>
 
     <label for="home-vertical-slider">Home Button Vertical Position</label>
-    <input type="range" id="home-vertical-slider" min="0" max="100" value="10" class="control-button">
+    <input type="range" id="home-vertical-slider" min="0" max="100" value="10" class="control-button"/>
   </div>
 
-  <!-- CONTENT -->
+  <div class="indicator-container" id="indicator-container"></div>
+  <div class="vertical-indicator" id="vertical-indicator"></div>
+
   <div id="viewport-wrapper" style="width: 100vw; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center;">
     <div class="container">
-      <div class="screen" data-screen-index="0">
+      <!-- MENU SCREEN -->
+      <div class="screen menu-screen" style="background-image: url('images/Titulka_tablet_a8_template_tanier_138mm.png');">
+        <h1 class="menu-title">Menu</h1>
+        <div class="menu-links">
+          <a href="#" data-target-screen="1" data-target-slide="0">Starter</a>
+          <a href="#" data-target-screen="1" data-target-slide="2">Special Offer</a>
+          <a href="#" data-target-screen="1" data-target-slide="4">Main Course</a>
+          <a href="#" data-target-screen="1" data-target-slide="5">Dessert</a>
+        </div>
+      </div>
+
+      <!-- CONTENT SCREEN -->
+      <div class="screen" data-screen-index="1">
         <div class="carousel-wrapper">
           <div class="carousel">
             <div class="slide" style="background-image: url('images/screen1_slide1.jpg');">
@@ -279,54 +329,136 @@
     </div>
   </div>
 
-  <!-- INDICATORS -->
-  <div class="indicator-container" id="indicator-container"></div>
-  <div class="vertical-indicator" id="vertical-indicator"></div>
   <img id="swipe_left" src="swipe-left.png" alt="Swipe PNG" class="animated-swipe-icon" />
 
-  <!-- SCRIPT -->
   <script>
     const swipeIcons = document.querySelectorAll('.swipe-icon, .vertical-swipe-icon, #swipe_left');
-  
+
     const hideSwipeIcons = () => {
       swipeIcons.forEach(icon => icon.style.display = 'none');
     };
-  
+
     document.getElementById('toggle-overlay').addEventListener('click', () => {
       const overlay = document.getElementById('control-overlay');
-      overlay.style.display = overlay.style.display === 'flex' ? 'none' : 'flex';
+      overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
     });
-  
+
     document.getElementById('fullscreen-toggle').addEventListener('click', () => {
       if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => console.warn('Failed to enter fullscreen:', err));
+        document.documentElement.requestFullscreen();
       } else {
         document.exitFullscreen();
       }
     });
-  
-    // Fullscreen on load (only works with user interaction on most browsers)
+
     window.addEventListener('load', () => {
       setTimeout(() => {
         if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen().catch(err => {
-            console.warn('Autoplay fullscreen blocked:', err);
-          });
+          document.documentElement.requestFullscreen().catch(() => {});
         }
       }, 500);
-  
-      // Swipe icon hiding on scroll
+
       const container = document.querySelector('.container');
-      if (container) {
-        container.addEventListener('scroll', () => hideSwipeIcons());
-      }
-  
+      if (container) container.addEventListener('scroll', () => hideSwipeIcons());
       document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
         wrapper.addEventListener('scroll', () => hideSwipeIcons());
       });
+
+      const indicatorContainer = document.getElementById('indicator-container');
+      const verticalIndicator = document.getElementById('vertical-indicator');
+      const screens = document.querySelectorAll('.screen');
+
+      screens.forEach((screen) => {
+        const carouselWrapper = screen.querySelector('.carousel-wrapper');
+        const slides = screen.querySelectorAll('.slide');
+
+        if (!carouselWrapper) return;
+
+        const updateIndicators = () => {
+          const index = Math.round(carouselWrapper.scrollLeft / window.innerWidth);
+          indicatorContainer.innerHTML = '';
+          for (let i = 0; i < slides.length; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'dot' + (i === index ? ' active' : '');
+            indicatorContainer.appendChild(dot);
+          }
+        };
+
+        updateIndicators();
+        carouselWrapper.addEventListener('scroll', updateIndicators);
+      });
+
+      const updateVerticalIndicators = () => {
+        const index = Math.round(container.scrollTop / window.innerHeight);
+        verticalIndicator.innerHTML = '';
+        for (let i = 0; i < screens.length; i++) {
+          const dot = document.createElement('div');
+          dot.className = 'vertical-dot' + (i === index ? ' active' : '');
+          verticalIndicator.appendChild(dot);
+        }
+      };
+      container.addEventListener('scroll', updateVerticalIndicators);
+      updateVerticalIndicators();
+    });
+
+    document.getElementById('show-swipe-icons').addEventListener('click', () => {
+      swipeIcons.forEach(icon => icon.style.display = 'block');
+    });
+
+    document.getElementById('zoom-slider').addEventListener('input', e => {
+      const zoom = e.target.value / 100;
+      const mainContainer = document.querySelector('.container');
+      mainContainer.style.transform = `scale(${zoom})`;
+      mainContainer.style.transformOrigin = 'center center';
+    });
+
+    document.getElementById('horizontal-indicator-slider').addEventListener('input', e => {
+      document.getElementById('indicator-container').style.bottom = `${80 * (e.target.value / 100)}px`;
+    });
+
+    document.getElementById('vertical-indicator-slider').addEventListener('input', e => {
+      document.getElementById('vertical-indicator').style.right = `${250 * (e.target.value / 100)}px`;
+    });
+
+    const homeButton = document.getElementById('home-button');
+    homeButton.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector('.container').scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    document.getElementById('home-horizontal-slider').addEventListener('input', e => {
+      homeButton.style.left = `${e.target.value}%`;
+    });
+
+    document.getElementById('home-vertical-slider').addEventListener('input', e => {
+      homeButton.style.top = `${e.target.value}%`;
+    });
+
+    document.querySelectorAll('.menu-links a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const screenIndex = parseInt(link.getAttribute('data-target-screen'), 10);
+        const slideIndex = parseInt(link.getAttribute('data-target-slide'), 10);
+
+        const container = document.querySelector('.container');
+        const screen = container.querySelectorAll('.screen')[screenIndex];
+
+        container.scrollTo({
+          top: screen.offsetTop,
+          behavior: 'smooth'
+        });
+
+        setTimeout(() => {
+          const carouselWrapper = screen.querySelector('.carousel-wrapper');
+          if (carouselWrapper) {
+            carouselWrapper.scrollTo({
+              left: slideIndex * window.innerWidth,
+              behavior: 'smooth'
+            });
+          }
+        }, 600);
+      });
     });
   </script>
-  
-  
 </body>
 </html>
