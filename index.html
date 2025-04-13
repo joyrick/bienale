@@ -297,44 +297,36 @@
       overlay.style.display = overlay.style.display === 'flex' ? 'none' : 'flex';
     });
   
-    // Fullscreen on load and refresh
+    document.getElementById('fullscreen-toggle').addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.warn('Failed to enter fullscreen:', err));
+      } else {
+        document.exitFullscreen();
+      }
+    });
+  
+    // Fullscreen on load (only works with user interaction on most browsers)
     window.addEventListener('load', () => {
-      const goFullscreen = () => {
+      setTimeout(() => {
         if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen().catch((err) => {
-            console.warn("Fullscreen request failed:", err);
+          document.documentElement.requestFullscreen().catch(err => {
+            console.warn('Autoplay fullscreen blocked:', err);
           });
         }
-      };
+      }, 500);
   
-      goFullscreen();
-  
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') {
-          goFullscreen();
-        }
-      });
-  
-      // Swipe icon hiding on vertical scroll
+      // Swipe icon hiding on scroll
       const container = document.querySelector('.container');
-      let scrollTimeout;
-      container.addEventListener('scroll', () => {
-        hideSwipeIcons();
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {}, 100);
-      });
+      if (container) {
+        container.addEventListener('scroll', () => hideSwipeIcons());
+      }
   
-      // Swipe icon hiding on horizontal scroll
-      document.querySelectorAll('.carousel-wrapper').forEach(carousel => {
-        let horizontalScrollTimeout;
-        carousel.addEventListener('scroll', () => {
-          hideSwipeIcons();
-          clearTimeout(horizontalScrollTimeout);
-          horizontalScrollTimeout = setTimeout(() => {}, 100);
-        });
+      document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
+        wrapper.addEventListener('scroll', () => hideSwipeIcons());
       });
     });
   </script>
+  
   
 </body>
 </html>
