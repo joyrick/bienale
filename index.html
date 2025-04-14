@@ -446,6 +446,17 @@
         }, 600);
       });
     });
+
+    document.getElementById('home-button').addEventListener('click', (e) => {
+  e.preventDefault();
+  const container = document.querySelector('.container');
+  container.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Also reset horizontal scrolls inside all carousels (just in case)
+  document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
+    wrapper.scrollTo({ left: 0, behavior: 'smooth' });
+  });
+});
   </script>
 </body>
 </html>
