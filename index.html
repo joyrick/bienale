@@ -464,10 +464,14 @@ document.getElementById('home-button').addEventListener('click', (e) => {
       wrapper.scrollTo({ left: 0, behavior: 'smooth' });
     });
 
-  }, 200); 
-  document.querySelectorAll('.swipe-icon, .vertical-swipe-icon, .animated-swipe-icon').forEach(icon => {
+  }, 200);
+  
+  setTimeout(() => {
+    document.querySelectorAll('.swipe-icon, .vertical-swipe-icon, .animated-swipe-icon').forEach(icon => {
       icon.style.display = 'block';
     });// You can tweak the delay if needed
+  }, 300);
+  
 });
   </script>
 </body>
