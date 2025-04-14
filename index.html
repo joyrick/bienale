@@ -178,6 +178,7 @@
     .menu-title {
       font-size: 3rem;
       margin-top: 60px;
+      color: blue;
     }
 
     .menu-links {
@@ -322,10 +323,12 @@
     <div class="screen" data-screen-index="1">
       <div class="carousel-wrapper">
         <div class="carousel">
+          <!-- starter slide tu -->
           <div class="slide" style="background-image: url('images/screen1_slide1.jpg');">
             <div class="swipe-icon"></div>
             <img src="swipe dole.png" alt="Swipe Down Icon" class="vertical-swipe-icon" />
           </div>
+          <!-- ostatne horizontalne slidy tu-->
           <div class="slide" style="background-image: url('images/1_1.jpeg');"></div>
           <div class="slide" style="background-image: url('images/1_2.jpeg');"></div>
           <div class="slide" style="background-image: url('images/1_3.jpeg');"></div>
@@ -455,12 +458,10 @@ document.getElementById('home-button').addEventListener('click', (e) => {
   const container = document.querySelector('.container');
   const firstScreen = container.querySelector('.screen');
 
-  // Scroll vertically to top (menu)
+  // Scroll vertically top (menu)
   container.scrollTo({ top: firstScreen.offsetTop, behavior: 'smooth' });
 
-  // After slight delay, reset horizontal scroll + swipe icons
   setTimeout(() => {
-    // Reset horizontal scroll
     document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
       wrapper.scrollTo({ left: 0, behavior: 'smooth' });
     });
@@ -470,7 +471,7 @@ document.getElementById('home-button').addEventListener('click', (e) => {
   setTimeout(() => {
     document.querySelectorAll('.swipe-icon, .vertical-swipe-icon, .animated-swipe-icon').forEach(icon => {
       icon.style.display = 'block';
-    });// You can tweak the delay if needed
+    });
   }, 300);
   
 });
@@ -483,19 +484,19 @@ document.getElementById('zoom-slider').addEventListener('input', (e) => {
   container.style.transformOrigin = 'center center';
 });
 
-// HORIZONTAL INDICATOR POSITION (move up/down)
+// HORIZONTAL INDICATOR 
 document.getElementById('horizontal-indicator-slider').addEventListener('input', (e) => {
   const pos = 80 * (e.target.value / 100);
   document.getElementById('indicator-container').style.bottom = `${pos}px`;
 });
 
-// VERTICAL INDICATOR POSITION (move left/right)
+// VERTICAL INDICATOR 
 document.getElementById('vertical-indicator-slider').addEventListener('input', (e) => {
   const pos = 250 * (e.target.value / 100);
   document.getElementById('vertical-indicator').style.right = `${pos}px`;
 });
 
-// HOME BUTTON POSITION SLIDERS
+// HOME BUTTON  SLIDERS
 document.getElementById('home-horizontal-slider').addEventListener('input', (e) => {
   const percent = e.target.value;
   document.getElementById('home-button').style.left = `${percent}%`;
