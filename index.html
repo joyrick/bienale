@@ -365,6 +365,8 @@
     location.reload();
    })
 
+// skryt swipe icons po urcitom case
+
     window.addEventListener('load', () => {
       setTimeout(() => {
         const container = document.querySelector('.container');
@@ -372,7 +374,9 @@
         document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
           wrapper.addEventListener('scroll', hideSwipeIcons);
         });
-      }, 2000); // Delay hiding swipe icons
+      }, 2000);
+
+// indikatory
 
       const container = document.querySelector('.container');
       const indicatorContainer = document.getElementById('indicator-container');
@@ -412,9 +416,13 @@
       updateVerticalIndicators();
     });
 
+// zobrazit swipe icons
+
     document.getElementById('show-swipe-icons').addEventListener('click', () => {
       swipeIcons.forEach(icon => icon.style.display = 'block');
     });
+
+// preklikavanie
 
     document.querySelectorAll('.menu-links a').forEach(link => {
       link.addEventListener('click', (e) => {
