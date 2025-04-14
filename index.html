@@ -280,6 +280,7 @@
             onclick="document.getElementById('control-overlay').style.display='none'">Close</button>
     <button id="fullscreen-toggle" class="control-button">Fullscreen</button>
     <button id="show-swipe-icons" class="control-button">Show Swipe Icons</button>
+    <button id="reload-website" class="control-button">Reload website</button>
 
     <label for="zoom-slider">Zoom Level</label>
     <input type="range" id="zoom-slider" min="50" max="150" value="100" class="control-button"/>
@@ -348,6 +349,8 @@
       overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
     });
 
+// fullscreen tlacidlo
+
     document.getElementById('fullscreen-toggle').addEventListener('click', () => {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen();
@@ -355,6 +358,12 @@
         document.exitFullscreen();
       }
     });
+
+// reload website
+
+   document.getElementById('reload-website').addEventListener('click', () => {
+    location.reload();
+   })
 
     window.addEventListener('load', () => {
       setTimeout(() => {
