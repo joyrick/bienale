@@ -473,6 +473,37 @@ document.getElementById('home-button').addEventListener('click', (e) => {
   }, 300);
   
 });
+
+// ZOOM SLIDER
+document.getElementById('zoom-slider').addEventListener('input', (e) => {
+  const zoom = e.target.value / 100;
+  const container = document.querySelector('.container');
+  container.style.transform = `scale(${zoom})`;
+  container.style.transformOrigin = 'center center';
+});
+
+// HORIZONTAL INDICATOR POSITION (move up/down)
+document.getElementById('horizontal-indicator-slider').addEventListener('input', (e) => {
+  const pos = 80 * (e.target.value / 100);
+  document.getElementById('indicator-container').style.bottom = `${pos}px`;
+});
+
+// VERTICAL INDICATOR POSITION (move left/right)
+document.getElementById('vertical-indicator-slider').addEventListener('input', (e) => {
+  const pos = 250 * (e.target.value / 100);
+  document.getElementById('vertical-indicator').style.right = `${pos}px`;
+});
+
+// HOME BUTTON POSITION SLIDERS
+document.getElementById('home-horizontal-slider').addEventListener('input', (e) => {
+  const percent = e.target.value;
+  document.getElementById('home-button').style.left = `${percent}%`;
+});
+
+document.getElementById('home-vertical-slider').addEventListener('input', (e) => {
+  const percent = e.target.value;
+  document.getElementById('home-button').style.top = `${percent}%`;
+});
   </script>
 </body>
 </html>
