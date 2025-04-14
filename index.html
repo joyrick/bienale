@@ -286,7 +286,7 @@
     }
   </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
   <!-- Control Buttons -->
   <div class="button-container">
     <a href="#" id="home-button" class="home-button">Home</a>
@@ -360,6 +360,12 @@
 
   <!-- JavaScript -->
   <script>
+
+// vypnut oznacovanie slov
+
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+// swipe ikony
     const swipeIcons = document.querySelectorAll('.swipe-icon, .vertical-swipe-icon, .animated-swipe-icon');
 
     const hideSwipeIcons = () => {
