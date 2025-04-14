@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bienale</title>
   <style>
-    /* Reset & Layout */
     * {
       margin: 0;
       padding: 0;
@@ -449,15 +448,27 @@
 
 // home button
 
-    document.getElementById('home-button').addEventListener('click', (e) => {
+document.getElementById('home-button').addEventListener('click', (e) => {
   e.preventDefault();
+
   const container = document.querySelector('.container');
-  container.scrollTo({ top: 0, behavior: 'smooth' });
+  const firstScreen = container.querySelector('.screen');
 
+  // Scroll vertically to top (menu)
+  container.scrollTo({ top: firstScreen.offsetTop, behavior: 'smooth' });
 
-  document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
-    wrapper.scrollTo({ left: 0, behavior: 'smooth' });
-  });
+  // After slight delay, reset horizontal scroll + swipe icons
+  setTimeout(() => {
+    // Reset horizontal scroll
+    document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
+      wrapper.scrollTo({ left: 0, behavior: 'smooth' });
+    });
+
+    // Reset swipe icons
+    document.querySelectorAll('.swipe-icon, .vertical-swipe-icon, .animated-swipe-icon').forEach(icon => {
+      icon.style.display = 'block';
+    });
+  }, 600); // You can tweak the delay if needed
 });
   </script>
 </body>
