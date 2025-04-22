@@ -623,25 +623,22 @@
 
   <!-- JavaScript -->
   <script>
-
-// vypnut oznacovanie slov
-
-document.addEventListener('contextmenu', event => event.preventDefault());
-
-// swipe ikony
+    // vypnut oznacovanie slov
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    
+    // swipe ikony
     const swipeIcons = document.querySelectorAll('.swipe-icon, .vertical-swipe-icon, .animated-swipe-icon');
-
+    
     const hideSwipeIcons = () => {
       swipeIcons.forEach(icon => icon.style.display = 'none');
     };
-
+    
     document.getElementById('toggle-overlay').addEventListener('click', () => {
       const overlay = document.getElementById('control-overlay');
       overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
     });
-
-// fullscreen tlacidlo
-
+    
+    // fullscreen tlacidlo
     document.getElementById('fullscreen-toggle').addEventListener('click', () => {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen();
@@ -649,15 +646,13 @@ document.addEventListener('contextmenu', event => event.preventDefault());
         document.exitFullscreen();
       }
     });
-
-// reload website
-
-   document.getElementById('reload-website').addEventListener('click', () => {
-    location.reload();
-   })
-
-// skryt swipe icons po urcitom case
-
+    
+    // reload website
+    document.getElementById('reload-website').addEventListener('click', () => {
+      location.reload();
+    });
+    
+    // skryt swipe icons po urcitom case
     window.addEventListener('load', () => {
       setTimeout(() => {
         const container = document.querySelector('.container');
@@ -666,19 +661,18 @@ document.addEventListener('contextmenu', event => event.preventDefault());
           wrapper.addEventListener('scroll', hideSwipeIcons);
         });
       }, 2000);
-
-// indikatory
-
+    
+      // indikatory
       const container = document.querySelector('.container');
       const indicatorContainer = document.getElementById('indicator-container');
       const verticalIndicator = document.getElementById('vertical-indicator');
       const screens = document.querySelectorAll('.screen');
-
+    
       screens.forEach((screen) => {
         const carouselWrapper = screen.querySelector('.carousel-wrapper');
         const slides = screen.querySelectorAll('.slide');
         if (!carouselWrapper) return;
-
+    
         const updateIndicators = () => {
           const index = Math.round(carouselWrapper.scrollLeft / window.innerWidth);
           indicatorContainer.innerHTML = '';
@@ -688,11 +682,11 @@ document.addEventListener('contextmenu', event => event.preventDefault());
             indicatorContainer.appendChild(dot);
           }
         };
-
+    
         updateIndicators();
         carouselWrapper.addEventListener('scroll', updateIndicators);
       });
-
+    
       const updateVerticalIndicators = () => {
         const index = Math.round(container.scrollTop / window.innerHeight);
         verticalIndicator.innerHTML = '';
@@ -702,30 +696,28 @@ document.addEventListener('contextmenu', event => event.preventDefault());
           verticalIndicator.appendChild(dot);
         }
       };
-
+    
       container.addEventListener('scroll', updateVerticalIndicators);
       updateVerticalIndicators();
     });
-
-// zobrazit swipe icons
-
+    
+    // zobrazit swipe icons
     document.getElementById('show-swipe-icons').addEventListener('click', () => {
       swipeIcons.forEach(icon => icon.style.display = 'block');
     });
-
-// preklikavanie
-
+    
+    // preklikavanie menu
     document.querySelectorAll('.menu-links a').forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
         const screenIndex = parseInt(link.getAttribute('data-target-screen'), 10);
         const slideIndex = parseInt(link.getAttribute('data-target-slide'), 10);
-
+    
         const container = document.querySelector('.container');
         const screen = container.querySelectorAll('.screen')[screenIndex];
-
+    
         container.scrollTo({ top: screen.offsetTop, behavior: 'smooth' });
-
+    
         setTimeout(() => {
           const carouselWrapper = screen.querySelector('.carousel-wrapper');
           if (carouselWrapper) {
@@ -737,63 +729,87 @@ document.addEventListener('contextmenu', event => event.preventDefault());
         }, 600);
       });
     });
-
-// home button
-
-document.getElementById('home-button').addEventListener('click', (e) => {
-  e.preventDefault();
-
-  const container = document.querySelector('.container');
-  const firstScreen = container.querySelector('.screen');
-
-  // Scroll vertically top (menu)
-  container.scrollTo({ top: firstScreen.offsetTop, behavior: 'smooth' });
-
-  setTimeout(() => {
-    document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
-      wrapper.scrollTo({ left: 0, behavior: 'smooth' });
+    
+    // home button
+    document.getElementById('home-button').addEventListener('click', (e) => {
+      e.preventDefault();
+    
+      const container = document.querySelector('.container');
+      const firstScreen = container.querySelector('.screen');
+    
+      container.scrollTo({ top: firstScreen.offsetTop, behavior: 'smooth' });
+    
+      setTimeout(() => {
+        document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
+          wrapper.scrollTo({ left: 0, behavior: 'smooth' });
+        });
+      }, 200);
+    
+      setTimeout(() => {
+        swipeIcons.forEach(icon => icon.style.display = 'block');
+      }, 300);
     });
-
-  }, 200);
-  
-  setTimeout(() => {
-    document.querySelectorAll('.swipe-icon, .vertical-swipe-icon, .animated-swipe-icon').forEach(icon => {
-      icon.style.display = 'block';
+    
+    // ZOOM SLIDER
+    document.getElementById('zoom-slider').addEventListener('input', (e) => {
+      const zoom = e.target.value / 100;
+      const container = document.querySelector('.container');
+      container.style.transform = `scale(${zoom})`;
+      container.style.transformOrigin = 'center center';
     });
-  }, 300);
-  
-});
-
-// ZOOM SLIDER
-document.getElementById('zoom-slider').addEventListener('input', (e) => {
-  const zoom = e.target.value / 100;
-  const container = document.querySelector('.container');
-  container.style.transform = `scale(${zoom})`;
-  container.style.transformOrigin = 'center center';
-});
-
-// HORIZONTAL INDICATOR 
-document.getElementById('horizontal-indicator-slider').addEventListener('input', (e) => {
-  const pos = 80 * (e.target.value / 100);
-  document.getElementById('indicator-container').style.bottom = `${pos}px`;
-});
-
-// VERTICAL INDICATOR 
-document.getElementById('vertical-indicator-slider').addEventListener('input', (e) => {
-  const pos = 250 * (e.target.value / 100);
-  document.getElementById('vertical-indicator').style.right = `${pos}px`;
-});
-
-// HOME BUTTON  SLIDERS
-document.getElementById('home-horizontal-slider').addEventListener('input', (e) => {
-  const percent = e.target.value;
-  document.getElementById('home-button').style.left = `${percent}%`;
-});
-
-document.getElementById('home-vertical-slider').addEventListener('input', (e) => {
-  const percent = e.target.value;
-  document.getElementById('home-button').style.top = `${percent}%`;
-});
-  </script>
+    
+    // HORIZONTAL INDICATOR 
+    document.getElementById('horizontal-indicator-slider').addEventListener('input', (e) => {
+      const pos = 80 * (e.target.value / 100);
+      document.getElementById('indicator-container').style.bottom = `${pos}px`;
+    });
+    
+    // VERTICAL INDICATOR 
+    document.getElementById('vertical-indicator-slider').addEventListener('input', (e) => {
+      const pos = 250 * (e.target.value / 100);
+      document.getElementById('vertical-indicator').style.right = `${pos}px`;
+    });
+    
+    // HOME BUTTON  SLIDERS
+    document.getElementById('home-horizontal-slider').addEventListener('input', (e) => {
+      const percent = e.target.value;
+      document.getElementById('home-button').style.left = `${percent}%`;
+    });
+    
+    document.getElementById('home-vertical-slider').addEventListener('input', (e) => {
+      const percent = e.target.value;
+      document.getElementById('home-button').style.top = `${percent}%`;
+    });
+    
+    // 👇 Add this block to reset carousel to first slide on vertical scroll
+    let currentScreenIndex = 0;
+    let isScrolling = false;
+    
+    document.querySelector('.container').addEventListener('scroll', () => {
+      if (isScrolling) return;
+      isScrolling = true;
+    
+      setTimeout(() => {
+        const container = document.querySelector('.container');
+        const screens = document.querySelectorAll('.screen');
+        const newScreenIndex = Math.round(container.scrollTop / window.innerHeight);
+    
+        if (newScreenIndex !== currentScreenIndex) {
+          currentScreenIndex = newScreenIndex;
+          const currentScreen = screens[currentScreenIndex];
+          const carouselWrapper = currentScreen.querySelector('.carousel-wrapper');
+    
+          if (carouselWrapper) {
+            carouselWrapper.scrollTo({
+              left: 0,
+              behavior: 'smooth'
+            });
+          }
+        }
+    
+        isScrolling = false;
+      }, 100);
+    });
+    </script>
 </body>
 </html>
