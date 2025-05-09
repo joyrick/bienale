@@ -285,29 +285,59 @@
       font-size: 14px;
       margin-bottom: 20px;
     }
+
+    .password-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: none; /* Initially hidden */
+      align-items: center;
+      justify-content: center;
+      z-index: 300;
+      color: white;
+      font-size: 1.5rem;
+      flex-direction: column;
+    }
+    .password-input {
+      padding: 10px;
+      font-size: 1.2rem;
+      margin: 10px;
+    }
+    .password-btn {
+      padding: 10px;
+      background-color: blue;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+    .password-error {
+      color: red;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body oncontextmenu="return false;">
-<!-- Password Overlay -->
-<div id="password-overlay" class="control-overlay" style="display: flex;">
-    <div style="background-color: white; padding: 20px; border-radius: 10px;">
-        <label for="password-input" style="color: black; font-size: 20px;">Enter Password:</label>
-        <input type="password" id="password-input" style="font-size: 20px; margin: 10px;" />
-        <button id="password-submit" style="font-size: 20px; margin: 5px;">Submit</button>
-        <button onclick="document.getElementById('password-overlay').style.display='none'" 
-                style="font-size: 20px; margin: 5px;">Cancel</button>
-        <p id="password-error" style="color: red; font-size: 16px; display: none;">Incorrect Password</p>
-    </div>
-</div>
+<div id="password-overlay" class="password-overlay">
+    <div>Enter Password:</div>
+    <input type="password" id="password-input" class="password-input" placeholder="Password" />
+    <button id="password-btn" class="password-btn">Submit</button>
+    <div id="password-error" class="password-error" style="display: none;">Incorrect password. Try again.</div>
+  </div>
 
-<!-- Control Overlay -->
-<div id="control-overlay" class="control-overlay" style="display: none;">
-    <button class="control-overlay-close control-button"
-            onclick="document.getElementById('control-overlay').style.display='none'">Close</button>
+  <div class="button-container">
+    <a href="#" id="home-button" class="home-button">Home</a>
+    <button id="toggle-overlay" class="control-overlay-button">Controls</button>
+  </div>
+
+  <div id="control-overlay" class="control-overlay" style="display: none;">
+    <button class="control-overlay-close control-button" onclick="document.getElementById('control-overlay').style.display='none'">Close</button>
     <button id="fullscreen-toggle" class="control-button">Fullscreen</button>
     <button id="show-swipe-icons" class="control-button">Show Swipe Icons</button>
     <button id="reload-website" class="control-button">Reload website</button>
-
     <label for="zoom-slider">Zoom Level</label>
     <input type="range" id="zoom-slider" min="50" max="150" value="100" class="control-button"/>
 
@@ -322,7 +352,7 @@
 
     <label for="home-vertical-slider">Home Button Vertical Position</label>
     <input type="range" id="home-vertical-slider" min="0" max="100" value="10" class="control-button"/>
-</div>
+  </div>
 
   <!-- Indicators -->
   <div class="indicator-container" id="indicator-container"></div>
@@ -641,17 +671,25 @@
     };
     
     // Password Overlay Logic
-document.getElementById('toggle-overlay').addEventListener('click', () => {
-    const overlay = document.getElementById('control-overlay');
-    const passwordOverlay = document.getElementById('password-overlay');
+document.getElementById('toggle-overlay').addEventListener('click', function() {
+      document.getElementById('password-overlay').style.display = 'flex';
+    });
 
-    // Show password overlay if controls are not yet unlocked
-    if (overlay.style.display !== 'flex') {
-        passwordOverlay.style.display = 'flex';
-    } else {
-        overlay.style.display = 'none';
-    }
-});
+    document.getElementById('password-btn').addEventListener('click', function() {
+      const password = document.getElementById('password-input').value;
+      if (password === '123') {
+        document.getElementById('password-overlay').style.display = 'none';
+        document.getElementById('control-overlay').style.display = 'flex';
+      } else {
+        document.getElementById('password-error').style.display = 'block';
+      }
+    });
+
+    document.getElementById('password-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        document.getElementById('password-btn').click();
+      }
+    });
 
 document.getElementById('password-submit').addEventListener('click', () => {
     const password = document.getElementById('password-input').value;
