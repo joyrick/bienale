@@ -322,11 +322,11 @@
 </head>
 <body oncontextmenu="return false;">
 <div id="password-overlay" class="password-overlay">
-    <button id="password-back" class="password-btn" style="position: absolute; top: 10px; left: 10px;">Back</button>
     <div>Enter Password:</div>
     <input type="password" id="password-input" autocomplete="off" class="password-input" placeholder="Password" />
     <button id="password-btn" class="password-btn">Submit</button>
     <div id="password-error" class="password-error" style="display: none;">Incorrect password. Try again.</div>
+    <button id="password-back" class="password-btn" style="position: absolute; top: 10px; left: 10px;">Back</button>
   </div>
 
   <div class="button-container">
@@ -354,7 +354,6 @@
     <label for="home-vertical-slider">Home Button Vertical Position</label>
     <input type="range" id="home-vertical-slider" min="0" max="100" value="10" class="control-button"/>
   </div>
-
 
   <!-- Indicators -->
   <div class="indicator-container" id="indicator-container"></div>
@@ -673,12 +672,18 @@
     };
     
     // Password Overlay Logic
- document.getElementById('toggle-overlay').addEventListener('click', function() {
+document.getElementById('toggle-overlay').addEventListener('click', function() {
       document.getElementById('password-error').style.display = 'none';
+      document.getElementById('password-input').value = '';
       document.getElementById('password-overlay').style.display = 'flex';
     });
 
-    document.getElementById('password-btn').addEventListener('click', function() {
+    document.getElementById('password-btn').addEventListener('click', handlePassword);
+    document.getElementById('password-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') handlePassword();
+    });
+
+    function handlePassword() {
       const password = document.getElementById('password-input').value;
       if (password === '123') {
         document.getElementById('password-overlay').style.display = 'none';
@@ -689,58 +694,34 @@
         document.getElementById('password-error').style.display = 'block';
         document.getElementById('password-input').value = '';
       }
-    });
-        document.getElementById('control-overlay').style.display = 'flex';
-        initializeControls();
-      } else {
-        document.getElementById('password-error').style.display = 'block';
-      }
-    });
-
-    document.getElementById('password-input').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        document.getElementById('password-btn').click();
-      }
-    });
-
-    function initializeControls() {
-      document.getElementById('fullscreen-toggle').addEventListener('click', () => {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen();
-        } else {
-          document.exitFullscreen();
-        }
-      });
-
-      document.getElementById('reload-website').addEventListener('click', () => {
-        location.reload();
-      });
-
-      document.getElementById('zoom-slider').addEventListener('input', (e) => {
-        document.body.style.transform = `scale(${e.target.value / 100})`;
-        document.body.style.transformOrigin = 'center center';
-      });
-
-      document.getElementById('horizontal-indicator-slider').addEventListener('input', (e) => {
-        document.getElementById('indicator-container').style.bottom = `${e.target.value}px`;
-      });
-
-      document.getElementById('vertical-indicator-slider').addEventListener('input', (e) => {
-        document.getElementById('vertical-indicator').style.right = `${e.target.value}px`;
-      });
-
-      document.getElementById('home-horizontal-slider').addEventListener('input', (e) => {
-        document.getElementById('home-button').style.left = `${e.target.value}%`;
-      });
-
-      document.getElementById('home-vertical-slider').addEventListener('input', (e) => {
-        document.getElementById('home-button').style.top = `${e.target.value}%`;
-      });
     }
-  document.getElementById('password-back').addEventListener('click', function() {
+
+    document.getElementById('password-back').addEventListener('click', function() {
       document.getElementById('password-overlay').style.display = 'none';
       document.getElementById('password-input').value = '';
     });
+
+    function initializeControls() {
+      document.getElementById('fullscreen-toggle').onclick = () => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+
+      document.getElementById('reload-website').onclick = () => location.reload();
+
+      document.getElementById('show-swipe-icons').onclick = () => {
+        document.querySelectorAll('.swipe-icon, .vertical-swipe-icon, .animated-swipe-icon').forEach(icon => icon.style.display = 'block');
+      };
+
+      document.getElementById('zoom-slider').oninput = (e) => {
+        document.body.style.transform = `scale(${e.target.value / 100})`;
+      };
+
+      document.getElementById('horizontal-indicator-slider').oninput = (e) => {
+        document.getElementById('indicator-container').style.bottom = `${e.target.value}%`;
+      };
+
+      document.getElementById('vertical-indicator-slider').oninput = (e) => {
+        document.getElementById('vertical-indicator').style.right = `${e.target.value}%`;
+      };
+    }
     
     // skryt swipe icons po urcitom case
     window.addEventListener('load', () => {
