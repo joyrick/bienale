@@ -678,11 +678,17 @@
     });
 
     document.getElementById('password-btn').addEventListener('click', function() {
-      document.getElementById('password-input').value = '';
       const password = document.getElementById('password-input').value;
       if (password === '123') {
         document.getElementById('password-overlay').style.display = 'none';
-document.getElementById('password-input').value = '';
+        document.getElementById('control-overlay').style.display = 'flex';
+        document.getElementById('password-input').value = '';
+        initializeControls();
+      } else {
+        document.getElementById('password-error').style.display = 'block';
+        document.getElementById('password-input').value = '';
+      }
+    });
         document.getElementById('control-overlay').style.display = 'flex';
         initializeControls();
       } else {
