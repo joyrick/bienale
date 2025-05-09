@@ -326,7 +326,7 @@
     <input type="password" id="password-input" autocomplete="off" class="password-input" placeholder="Password" />
     <button id="password-btn" class="password-btn">Submit</button>
     <div id="password-error" class="password-error" style="display: none;">Incorrect password. Try again.</div>
-    <button id="password-back" class="password-btn" style="position: absolute; top: 10px; left: 10px;">Back</button>
+    <button id="password-back" class="password-btn" style="position:center;">Back</button>
   </div>
 
   <div class="button-container">
@@ -685,7 +685,7 @@ document.getElementById('toggle-overlay').addEventListener('click', function() {
 
     function handlePassword() {
       const password = document.getElementById('password-input').value;
-      if (password === '123') {
+      if (password === 'menucko') {
         document.getElementById('password-overlay').style.display = 'none';
         document.getElementById('control-overlay').style.display = 'flex';
         document.getElementById('password-input').value = '';
