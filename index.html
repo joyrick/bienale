@@ -288,14 +288,20 @@
   </style>
 </head>
 <body oncontextmenu="return false;">
-  <!-- Control Buttons -->
-  <div class="button-container">
-    <a href="#" id="home-button" class="home-button">Home</a>
-    <button id="toggle-overlay" class="control-overlay-button">Controls</button>
-  </div>
+<!-- Password Overlay -->
+<div id="password-overlay" class="control-overlay" style="display: flex;">
+    <div style="background-color: white; padding: 20px; border-radius: 10px;">
+        <label for="password-input" style="color: black; font-size: 20px;">Enter Password:</label>
+        <input type="password" id="password-input" style="font-size: 20px; margin: 10px;" />
+        <button id="password-submit" style="font-size: 20px; margin: 5px;">Submit</button>
+        <button onclick="document.getElementById('password-overlay').style.display='none'" 
+                style="font-size: 20px; margin: 5px;">Cancel</button>
+        <p id="password-error" style="color: red; font-size: 16px; display: none;">Incorrect Password</p>
+    </div>
+</div>
 
-  <!-- Control Overlay -->
-  <div id="control-overlay" class="control-overlay">
+<!-- Control Overlay -->
+<div id="control-overlay" class="control-overlay" style="display: none;">
     <button class="control-overlay-close control-button"
             onclick="document.getElementById('control-overlay').style.display='none'">Close</button>
     <button id="fullscreen-toggle" class="control-button">Fullscreen</button>
@@ -316,7 +322,7 @@
 
     <label for="home-vertical-slider">Home Button Vertical Position</label>
     <input type="range" id="home-vertical-slider" min="0" max="100" value="10" class="control-button"/>
-  </div>
+</div>
 
   <!-- Indicators -->
   <div class="indicator-container" id="indicator-container"></div>
@@ -634,10 +640,33 @@
       swipeIcons.forEach(icon => icon.style.display = 'none');
     };
     
-    document.getElementById('toggle-overlay').addEventListener('click', () => {
-      const overlay = document.getElementById('control-overlay');
-      overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
-    });
+    // Password Overlay Logic
+document.getElementById('toggle-overlay').addEventListener('click', () => {
+    const overlay = document.getElementById('control-overlay');
+    const passwordOverlay = document.getElementById('password-overlay');
+
+    // Show password overlay if controls are not yet unlocked
+    if (overlay.style.display !== 'flex') {
+        passwordOverlay.style.display = 'flex';
+    } else {
+        overlay.style.display = 'none';
+    }
+});
+
+document.getElementById('password-submit').addEventListener('click', () => {
+    const password = document.getElementById('password-input').value;
+    const overlay = document.getElementById('control-overlay');
+    const passwordOverlay = document.getElementById('password-overlay');
+    const error = document.getElementById('password-error');
+
+    if (password === '123') {
+        passwordOverlay.style.display = 'none';
+        overlay.style.display = 'flex';
+        error.style.display = 'none';
+    } else {
+        error.style.display = 'block';
+    }
+});
     
     // fullscreen tlacidlo
     document.getElementById('fullscreen-toggle').addEventListener('click', () => {
