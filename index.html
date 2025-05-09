@@ -285,29 +285,6 @@
       font-size: 14px;
       margin-bottom: 20px;
     }
-
-    .password-overlay {
-  background-color: rgba(0, 0, 0, 0.9);
-  padding: 20px;
-  border-radius: 12px;
-}
-
-.password-overlay input {
-  padding: 12px;
-  font-size: 18px;
-  width: 250px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-}
-
-.password-overlay button {
-  background-color: blue;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 18px;
-}
   </style>
 </head>
 <body oncontextmenu="return false;">
@@ -316,14 +293,6 @@
     <a href="#" id="home-button" class="home-button">Home</a>
     <button id="toggle-overlay" class="control-overlay-button">Controls</button>
   </div>
-
-  <!-- heslo -->
-
-  <div id="password-overlay" class="password-overlay">
-  <h2>Enter Password</h2>
-  <input type="password" id="password-input" placeholder="Password">
-  <button onclick="checkPassword()">Submit</button>
-</div>
 
   <!-- Control Overlay -->
   <div id="control-overlay" class="control-overlay">
@@ -655,194 +624,193 @@
 
   <!-- JavaScript -->
   <script>
-  // Password Protected Overlay
-  document.getElementById('toggle-overlay').addEventListener('click', () => {
-    document.getElementById('password-overlay').style.display = 'flex';
-  });
-
-  function checkPassword() {
-    const password = document.getElementById('password-input').value;
-    if (password === 'your_password_here') { // Replace with your desired password
-      document.getElementById('password-overlay').style.display = 'none';
-      document.getElementById('control-overlay').style.display = 'flex';
-    } else {
-      alert('Incorrect password.');
-    }
-  }
-
-  // Swipe Icons
-  const swipeIcons = document.querySelectorAll('.swipe-icon, .vertical-swipe-icon, .animated-swipe-icon');
-  const hideSwipeIcons = () => {
-    swipeIcons.forEach(icon => icon.style.display = 'none');
-  };
-
-  // Show Control Overlay
-  document.getElementById('toggle-overlay').addEventListener('click', () => {
-    const overlay = document.getElementById('control-overlay');
-    overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
-  });
-
-  // Fullscreen Toggle
-  document.getElementById('fullscreen-toggle').addEventListener('click', () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
-    } else {
-      document.exitFullscreen();
-    }
-  });
-
-  // Reload Website
-  document.getElementById('reload-website').addEventListener('click', () => {
-    location.reload();
-  });
-
-  // Hide Swipe Icons Automatically
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      const container = document.querySelector('.container');
-      if (container) container.addEventListener('scroll', hideSwipeIcons);
-      document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
-        wrapper.addEventListener('scroll', hideSwipeIcons);
-      });
-    }, 3000);
-  });
-
-  // Horizontal and Vertical Indicators
-  const container = document.querySelector('.container');
-  const indicatorContainer = document.getElementById('indicator-container');
-  const verticalIndicator = document.getElementById('vertical-indicator');
-  const screens = document.querySelectorAll('.screen');
-
-  screens.forEach((screen) => {
-    const carouselWrapper = screen.querySelector('.carousel-wrapper');
-    const slides = screen.querySelectorAll('.slide');
-    if (!carouselWrapper) return;
-
-    const updateIndicators = () => {
-      const index = Math.round(carouselWrapper.scrollLeft / window.innerWidth);
-      indicatorContainer.innerHTML = '';
-      for (let i = 0; i < slides.length; i++) {
-        const dot = document.createElement('div');
-        dot.className = 'dot' + (i === index ? ' active' : '');
-        indicatorContainer.appendChild(dot);
-      }
+    // vypnut oznacovanie slov
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    
+    // swipe ikony
+    const swipeIcons = document.querySelectorAll('.swipe-icon, .vertical-swipe-icon, .animated-swipe-icon');
+    
+    const hideSwipeIcons = () => {
+      swipeIcons.forEach(icon => icon.style.display = 'none');
     };
-
-    updateIndicators();
-    carouselWrapper.addEventListener('scroll', updateIndicators);
-  });
-
-  const updateVerticalIndicators = () => {
-    const index = Math.round(container.scrollTop / window.innerHeight);
-    verticalIndicator.innerHTML = '';
-    for (let i = 0; i < screens.length; i++) {
-      const dot = document.createElement('div');
-      dot.className = 'vertical-dot' + (i === index ? ' active' : '');
-      verticalIndicator.appendChild(dot);
-    }
-  };
-
-  container.addEventListener('scroll', updateVerticalIndicators);
-  updateVerticalIndicators();
-
-  // Show Swipe Icons
-  document.getElementById('show-swipe-icons').addEventListener('click', () => {
-    swipeIcons.forEach(icon => icon.style.display = 'block');
-  });
-
-  // Menu Navigation
-  document.querySelectorAll('.menu-links a').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const screenIndex = parseInt(link.getAttribute('data-target-screen'), 10);
-      const slideIndex = parseInt(link.getAttribute('data-target-slide'), 10);
-
-      const container = document.querySelector('.container');
-      const screen = container.querySelectorAll('.screen')[screenIndex];
-
-      container.scrollTo({ top: screen.offsetTop, behavior: 'smooth' });
-
-      setTimeout(() => {
-        const carouselWrapper = screen.querySelector('.carousel-wrapper');
-        if (carouselWrapper) {
-          carouselWrapper.scrollTo({
-            left: slideIndex * window.innerWidth,
-            behavior: 'smooth'
-          });
-        }
-      }, 600);
+    
+    document.getElementById('toggle-overlay').addEventListener('click', () => {
+      const overlay = document.getElementById('control-overlay');
+      overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
     });
-  });
-
-  // Home Button
-  document.getElementById('home-button').addEventListener('click', (e) => {
-    e.preventDefault();
-    const container = document.querySelector('.container');
-    const firstScreen = container.querySelector('.screen');
-    container.scrollTo({ top: firstScreen.offsetTop, behavior: 'smooth' });
-
-    setTimeout(() => {
-      document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
-        wrapper.scrollTo({ left: 0, behavior: 'smooth' });
-      });
-    }, 200);
-
-    setTimeout(() => {
-      swipeIcons.forEach(icon => icon.style.display = 'block');
-    }, 300);
-  });
-
-  // Zoom Slider
-  document.getElementById('zoom-slider').addEventListener('input', (e) => {
-    const zoom = e.target.value / 100;
-    const container = document.querySelector('.container');
-    container.style.transform = `scale(${zoom})`;
-    container.style.transformOrigin = 'center center';
-  });
-
-  // Horizontal Indicator Position
-  document.getElementById('horizontal-indicator-slider').addEventListener('input', (e) => {
-    const pos = 80 * (e.target.value / 100);
-    document.getElementById('indicator-container').style.bottom = `${pos}px`;
-  });
-
-  // Vertical Indicator Position
-  document.getElementById('vertical-indicator-slider').addEventListener('input', (e) => {
-    const pos = 250 * (e.target.value / 100);
-    document.getElementById('vertical-indicator').style.right = `${pos}px`;
-  });
-
-  // Home Button Position Sliders
-  document.getElementById('home-horizontal-slider').addEventListener('input', (e) => {
-    document.getElementById('home-button').style.left = `${e.target.value}%`;
-  });
-
-  document.getElementById('home-vertical-slider').addEventListener('input', (e) => {
-    document.getElementById('home-button').style.top = `${e.target.value}%`;
-  });
-
-  // Reset Carousel on Vertical Scroll
-  let currentScreenIndex = 0;
-  let isScrolling = false;
-  container.addEventListener('scroll', () => {
-    if (isScrolling) return;
-    isScrolling = true;
-
-    setTimeout(() => {
-      const newScreenIndex = Math.round(container.scrollTop / window.innerHeight);
-      if (newScreenIndex !== currentScreenIndex) {
-        currentScreenIndex = newScreenIndex;
-        const currentScreen = screens[currentScreenIndex];
-        const carouselWrapper = currentScreen.querySelector('.carousel-wrapper');
-
-        if (carouselWrapper) {
-          carouselWrapper.scrollTo({ left: 0, behavior: 'smooth' });
-        }
+    
+    // fullscreen tlacidlo
+    document.getElementById('fullscreen-toggle').addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
       }
-      isScrolling = false;
-    }, 100);
-  });
-</script>
+    });
+    
+    // reload website
+    document.getElementById('reload-website').addEventListener('click', () => {
+      location.reload();
+    });
+    
+    // skryt swipe icons po urcitom case
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const container = document.querySelector('.container');
+        if (container) container.addEventListener('scroll', hideSwipeIcons);
+        document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
+          wrapper.addEventListener('scroll', hideSwipeIcons);
+        });
+      }, 3000);
+    
+      // indikatory
+      const container = document.querySelector('.container');
+      const indicatorContainer = document.getElementById('indicator-container');
+      const verticalIndicator = document.getElementById('vertical-indicator');
+      const screens = document.querySelectorAll('.screen');
+    
+      screens.forEach((screen) => {
+        const carouselWrapper = screen.querySelector('.carousel-wrapper');
+        const slides = screen.querySelectorAll('.slide');
+        if (!carouselWrapper) return;
+    
+        const updateIndicators = () => {
+          const index = Math.round(carouselWrapper.scrollLeft / window.innerWidth);
+          indicatorContainer.innerHTML = '';
+          for (let i = 0; i < slides.length; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'dot' + (i === index ? ' active' : '');
+            indicatorContainer.appendChild(dot);
+          }
+        };
+    
+        updateIndicators();
+        carouselWrapper.addEventListener('scroll', updateIndicators);
+      });
+    
+      const updateVerticalIndicators = () => {
+        const index = Math.round(container.scrollTop / window.innerHeight);
+        verticalIndicator.innerHTML = '';
+        for (let i = 0; i < screens.length; i++) {
+          const dot = document.createElement('div');
+          dot.className = 'vertical-dot' + (i === index ? ' active' : '');
+          verticalIndicator.appendChild(dot);
+        }
+      };
+    
+      container.addEventListener('scroll', updateVerticalIndicators);
+      updateVerticalIndicators();
+    });
+    
+    // zobrazit swipe icons
+    document.getElementById('show-swipe-icons').addEventListener('click', () => {
+      swipeIcons.forEach(icon => icon.style.display = 'block');
+    });
 
+    // preklikavanie menu
+    document.querySelectorAll('.menu-links a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const screenIndex = parseInt(link.getAttribute('data-target-screen'), 10);
+        const slideIndex = parseInt(link.getAttribute('data-target-slide'), 10);
+    
+        const container = document.querySelector('.container');
+        const screen = container.querySelectorAll('.screen')[screenIndex];
+    
+        container.scrollTo({ top: screen.offsetTop, behavior: 'smooth' });
+    
+        setTimeout(() => {
+          const carouselWrapper = screen.querySelector('.carousel-wrapper');
+          if (carouselWrapper) {
+            carouselWrapper.scrollTo({
+              left: slideIndex * window.innerWidth,
+              behavior: 'smooth'
+            });
+          }
+        }, 600);
+      });
+    });
+    
+    // home button
+    document.getElementById('home-button').addEventListener('click', (e) => {
+      e.preventDefault();
+    
+      const container = document.querySelector('.container');
+      const firstScreen = container.querySelector('.screen');
+    
+      container.scrollTo({ top: firstScreen.offsetTop, behavior: 'smooth' });
+    
+      setTimeout(() => {
+        document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
+          wrapper.scrollTo({ left: 0, behavior: 'smooth' });
+        });
+      }, 200);
+    
+      setTimeout(() => {
+        swipeIcons.forEach(icon => icon.style.display = 'block');
+      }, 300);
+    });
+    
+    // ZOOM SLIDER
+    document.getElementById('zoom-slider').addEventListener('input', (e) => {
+      const zoom = e.target.value / 100;
+      const container = document.querySelector('.container');
+      container.style.transform = `scale(${zoom})`;
+      container.style.transformOrigin = 'center center';
+    });
+    
+    // HORIZONTAL INDICATOR 
+    document.getElementById('horizontal-indicator-slider').addEventListener('input', (e) => {
+      const pos = 80 * (e.target.value / 100);
+      document.getElementById('indicator-container').style.bottom = `${pos}px`;
+    });
+    
+    // VERTICAL INDICATOR 
+    document.getElementById('vertical-indicator-slider').addEventListener('input', (e) => {
+      const pos = 250 * (e.target.value / 100);
+      document.getElementById('vertical-indicator').style.right = `${pos}px`;
+    });
+    
+    // HOME BUTTON  SLIDERS
+    document.getElementById('home-horizontal-slider').addEventListener('input', (e) => {
+      const percent = e.target.value;
+      document.getElementById('home-button').style.left = `${percent}%`;
+    });
+    
+    document.getElementById('home-vertical-slider').addEventListener('input', (e) => {
+      const percent = e.target.value;
+      document.getElementById('home-button').style.top = `${percent}%`;
+    });
+    
+    // 👇 Add this block to reset carousel to first slide on vertical scroll
+    let currentScreenIndex = 0;
+    let isScrolling = false;
+    
+    document.querySelector('.container').addEventListener('scroll', () => {
+      if (isScrolling) return;
+      isScrolling = true;
+    
+      setTimeout(() => {
+        const container = document.querySelector('.container');
+        const screens = document.querySelectorAll('.screen');
+        const newScreenIndex = Math.round(container.scrollTop / window.innerHeight);
+    
+        if (newScreenIndex !== currentScreenIndex) {
+          currentScreenIndex = newScreenIndex;
+          const currentScreen = screens[currentScreenIndex];
+          const carouselWrapper = currentScreen.querySelector('.carousel-wrapper');
+    
+          if (carouselWrapper) {
+            carouselWrapper.scrollTo({
+              left: 0,
+              behavior: 'smooth'
+            });
+          }
+        }
+    
+        isScrolling = false;
+      }, 100);
+    });
+    </script>
 </body>
 </html>
