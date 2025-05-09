@@ -672,14 +672,17 @@
     };
     
     // Password Overlay Logic
-document.getElementById('toggle-overlay').addEventListener('click', function() {
+ document.getElementById('toggle-overlay').addEventListener('click', function() {
+      document.getElementById('password-error').style.display = 'none';
       document.getElementById('password-overlay').style.display = 'flex';
     });
 
     document.getElementById('password-btn').addEventListener('click', function() {
+      document.getElementById('password-input').value = '';
       const password = document.getElementById('password-input').value;
       if (password === '123') {
         document.getElementById('password-overlay').style.display = 'none';
+document.getElementById('password-input').value = '';
         document.getElementById('control-overlay').style.display = 'flex';
         initializeControls();
       } else {
@@ -691,11 +694,6 @@ document.getElementById('toggle-overlay').addEventListener('click', function() {
       if (e.key === 'Enter') {
         document.getElementById('password-btn').click();
       }
-    });
-
-    document.getElementById('password-back').addEventListener('click', function() {
-      document.getElementById('password-overlay').style.display = 'none';
-      document.getElementById('password-input').value = '';
     });
 
     function initializeControls() {
@@ -732,6 +730,10 @@ document.getElementById('toggle-overlay').addEventListener('click', function() {
         document.getElementById('home-button').style.top = `${e.target.value}%`;
       });
     }
+  document.getElementById('password-back').addEventListener('click', function() {
+      document.getElementById('password-overlay').style.display = 'none';
+      document.getElementById('password-input').value = '';
+    });
     
     // skryt swipe icons po urcitom case
     window.addEventListener('load', () => {
