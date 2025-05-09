@@ -635,8 +635,12 @@
     };
     
     document.getElementById('toggle-overlay').addEventListener('click', () => {
-      const overlay = document.getElementById('control-overlay');
-      overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+      const password = prompt('Enter the password to access controls:');
+      if (password === 'bratislava') { // Replace with your desired password
+        document.getElementById('control-overlay').style.display = 'flex';
+      } else {
+        alert('Incorrect password.');
+      }
     });
     
     // fullscreen tlacidlo
