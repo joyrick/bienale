@@ -326,6 +326,7 @@
     <input type="password" id="password-input" autocomplete="off" class="password-input" placeholder="Password" />
     <button id="password-btn" class="password-btn">Submit</button>
     <div id="password-error" class="password-error" style="display: none;">Incorrect password. Try again.</div>
+    <button id="password-back" class="password-btn" style="position: absolute; top: 10px; left: 10px;">Back</button>
   </div>
 
   <div class="button-container">
@@ -690,6 +691,11 @@ document.getElementById('toggle-overlay').addEventListener('click', function() {
       if (e.key === 'Enter') {
         document.getElementById('password-btn').click();
       }
+    });
+
+    document.getElementById('password-back').addEventListener('click', function() {
+      document.getElementById('password-overlay').style.display = 'none';
+      document.getElementById('password-input').value = '';
     });
 
     function initializeControls() {
