@@ -680,6 +680,7 @@ document.getElementById('toggle-overlay').addEventListener('click', function() {
       if (password === '123') {
         document.getElementById('password-overlay').style.display = 'none';
         document.getElementById('control-overlay').style.display = 'flex';
+        initializeControls();
       } else {
         document.getElementById('password-error').style.display = 'block';
       }
@@ -691,34 +692,40 @@ document.getElementById('toggle-overlay').addEventListener('click', function() {
       }
     });
 
-document.getElementById('password-submit').addEventListener('click', () => {
-    const password = document.getElementById('password-input').value;
-    const overlay = document.getElementById('control-overlay');
-    const passwordOverlay = document.getElementById('password-overlay');
-    const error = document.getElementById('password-error');
+    function initializeControls() {
+      document.getElementById('fullscreen-toggle').addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen();
+        } else {
+          document.exitFullscreen();
+        }
+      });
 
-    if (password === '123') {
-        passwordOverlay.style.display = 'none';
-        overlay.style.display = 'flex';
-        error.style.display = 'none';
-    } else {
-        error.style.display = 'block';
+      document.getElementById('reload-website').addEventListener('click', () => {
+        location.reload();
+      });
+
+      document.getElementById('zoom-slider').addEventListener('input', (e) => {
+        document.body.style.transform = `scale(${e.target.value / 100})`;
+        document.body.style.transformOrigin = 'center center';
+      });
+
+      document.getElementById('horizontal-indicator-slider').addEventListener('input', (e) => {
+        document.getElementById('indicator-container').style.bottom = `${e.target.value}px`;
+      });
+
+      document.getElementById('vertical-indicator-slider').addEventListener('input', (e) => {
+        document.getElementById('vertical-indicator').style.right = `${e.target.value}px`;
+      });
+
+      document.getElementById('home-horizontal-slider').addEventListener('input', (e) => {
+        document.getElementById('home-button').style.left = `${e.target.value}%`;
+      });
+
+      document.getElementById('home-vertical-slider').addEventListener('input', (e) => {
+        document.getElementById('home-button').style.top = `${e.target.value}%`;
+      });
     }
-});
-    
-    // fullscreen tlacidlo
-    document.getElementById('fullscreen-toggle').addEventListener('click', () => {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
-      } else {
-        document.exitFullscreen();
-      }
-    });
-    
-    // reload website
-    document.getElementById('reload-website').addEventListener('click', () => {
-      location.reload();
-    });
     
     // skryt swipe icons po urcitom case
     window.addEventListener('load', () => {
