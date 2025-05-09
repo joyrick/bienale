@@ -322,11 +322,11 @@
 </head>
 <body oncontextmenu="return false;">
 <div id="password-overlay" class="password-overlay">
+    <button id="password-back" class="password-btn" style="position: absolute; top: 10px; left: 10px;">Back</button>
     <div>Enter Password:</div>
     <input type="password" id="password-input" autocomplete="off" class="password-input" placeholder="Password" />
     <button id="password-btn" class="password-btn">Submit</button>
     <div id="password-error" class="password-error" style="display: none;">Incorrect password. Try again.</div>
-    <button id="password-back" class="password-btn" style="position: absolute; top: 10px; left: 10px;">Back</button>
   </div>
 
   <div class="button-container">
@@ -354,6 +354,7 @@
     <label for="home-vertical-slider">Home Button Vertical Position</label>
     <input type="range" id="home-vertical-slider" min="0" max="100" value="10" class="control-button"/>
   </div>
+
 
   <!-- Indicators -->
   <div class="indicator-container" id="indicator-container"></div>
