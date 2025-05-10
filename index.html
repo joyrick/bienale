@@ -812,6 +812,22 @@ document.getElementById('toggle-overlay').addEventListener('click', function() {
         }, 600);
       });
     });
+
+    // toto kontroluje inactivity
+    let inactivityTimer;
+
+  function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(() => {
+      window.location.href = "#"; // Redirect to home slide
+    }, 120000); // 2 minutes (120 seconds)
+  }
+
+  document.addEventListener("mousemove", resetInactivityTimer);
+  document.addEventListener("keydown", resetInactivityTimer);
+  document.addEventListener("touchstart", resetInactivityTimer);
+
+  window.addEventListener("load", resetInactivityTimer);
     
     // home button
     document.getElementById('home-button').addEventListener('click', (e) => {
