@@ -820,7 +820,7 @@ document.getElementById('toggle-overlay').addEventListener('click', function() {
     clearTimeout(inactivityTimer);
     inactivityTimer = setTimeout(() => {
       window.location.href = "#"; // Redirect to home slide
-    }, 120000); // 2 minutes (120 seconds)
+    }, 600000); // 1 minuta
   }
 
   document.addEventListener("mousemove", resetInactivityTimer);
