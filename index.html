@@ -326,7 +326,7 @@
       top: 7%;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 150; /* Ensure it's above other elements */
+      z-index: 150;
      }
   </style>
 </head>
@@ -812,6 +812,22 @@ document.getElementById('toggle-overlay').addEventListener('click', function() {
         }, 600);
       });
     });
+
+    // toto kontroluje inactivity
+    let inactivityTimer;
+
+  function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(() => {
+      window.location.href = "#"; // Redirect to home slide
+    }, 120000); // 2 minutes (120 seconds)
+  }
+
+  document.addEventListener("mousemove", resetInactivityTimer);
+  document.addEventListener("keydown", resetInactivityTimer);
+  document.addEventListener("touchstart", resetInactivityTimer);
+
+  window.addEventListener("load", resetInactivityTimer);
     
     // home button
     document.getElementById('home-button').addEventListener('click', (e) => {
@@ -864,7 +880,7 @@ document.getElementById('toggle-overlay').addEventListener('click', function() {
       document.getElementById('home-button').style.top = `${percent}%`;
     });
     
-    // 👇 Add this block to reset carousel to first slide on vertical scroll
+    
     let currentScreenIndex = 0;
     let isScrolling = false;
     
