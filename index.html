@@ -319,11 +319,15 @@
       margin-top: 10px;
     }
     .author-text {
-      margin-top: 5px;
       text-align: center;
       font-size: 10px;
       color: blue;
-    }
+      position: fixed;
+      top: 50px; /* Adjust this value to your preference */
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 150; /* Ensure it's above other elements */
+     }
   </style>
 </head>
 <body oncontextmenu="return false;">
